@@ -36,6 +36,8 @@ canvas{
     animation:fadeIn 1.5s ease;
 }
 
+h1{margin-bottom:10px;}
+
 button{
     padding:12px 22px;
     font-size:16px;
@@ -68,7 +70,7 @@ img{
 
 <canvas id="fireworks"></canvas>
 
-<!-- 🎵 Background Music -->
+<!-- 🎵 Birthday Music -->
 <audio id="bgMusic" loop>
   <source src="{{ url_for('static', filename='music/happy-birthday.mp3') }}" type="audio/mpeg">
 </audio>
@@ -95,13 +97,13 @@ img{
 </div>
 
 <script>
-// ▶ Start music + show valentine
+/* Start music + show Valentine */
 document.getElementById("nextBtn").addEventListener("click",()=>{
     document.getElementById("bgMusic").play();
     document.getElementById("valentineSection").style.display="block";
 });
 
-// ❤️ YES
+/* YES clicked */
 document.getElementById("yesBtn").addEventListener("click",()=>{
     document.getElementById("valentineSection").style.display="none";
     document.getElementById("gallery").style.display="block";
@@ -109,19 +111,20 @@ document.getElementById("yesBtn").addEventListener("click",()=>{
     alert("💖 You just made my heart the happiest 😍");
 });
 
-// 🙈 NO button runs
+/* NO button escape */
 const noBtn=document.getElementById("noBtn");
 noBtn.addEventListener("mouseover",()=>{
     noBtn.style.left=Math.random()*(window.innerWidth-100)+"px";
     noBtn.style.top=Math.random()*(window.innerHeight-50)+"px";
 });
 
-// 🖼️ Slideshow (ONLY existing images)
+/* Slideshow */
 const images=[
 "{{ url_for('static', filename='images/pic1.jpg') }}",
-"{{ url_for('static', filename='images/pic2.png') }}",
-"{{ url_for('static', filename='images/pic3.png') }}",
-"{{ url_for('static', filename='images/pic4.png') }}"
+"{{ url_for('static', filename='images/pic2.jpg') }}",
+"{{ url_for('static', filename='images/pic3.jpg') }}",
+"{{ url_for('static', filename='images/pic4.jpg') }}",
+"{{ url_for('static', filename='images/pic5.jpg') }}"
 ];
 
 let i=0;
@@ -134,7 +137,7 @@ function startSlideshow(){
     },3000);
 }
 
-// 🎆 Fireworks
+/* Fireworks */
 const canvas=document.getElementById("fireworks");
 const ctx=canvas.getContext("2d");
 canvas.width=window.innerWidth;
@@ -165,6 +168,7 @@ function animate(){
     });
     requestAnimationFrame(animate);
 }
+
 setInterval(fire,1200);
 animate();
 </script>
