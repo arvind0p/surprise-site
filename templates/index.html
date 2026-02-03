@@ -13,7 +13,7 @@ body{
     overflow:hidden;
 }
 
-/* Fireworks */
+/* Fireworks canvas */
 canvas{
     position:fixed;
     top:0;
@@ -36,6 +36,8 @@ canvas{
     animation:fadeIn 1.5s ease;
 }
 
+h1{margin-bottom:10px;}
+
 button{
     padding:12px 22px;
     font-size:16px;
@@ -55,6 +57,7 @@ button{
 img{
     width:100%;
     border-radius:15px;
+    animation:fadeIn 1.5s ease;
 }
 
 @keyframes fadeIn{
@@ -66,6 +69,7 @@ img{
 
 <body>
 
+<!-- 🎆 Fireworks -->
 <canvas id="fireworks"></canvas>
 
 <!-- 🎵 Music -->
@@ -75,6 +79,7 @@ img{
 
 <div class="card">
     <h1>🎂 Happy Birthday Rishika 🎉</h1>
+
     <p>
         Today is special because <b>you</b> were born 💖<br>
         May your smile always stay this beautiful ✨
@@ -82,12 +87,14 @@ img{
 
     <button id="nextBtn">Next Surprise 🎀</button>
 
+    <!-- Valentine Section -->
     <div id="valentineSection">
         <p style="font-size:18px;">💘 Rishika, will you be my Valentine? 💘</p>
         <button id="yesBtn">YES 💖</button>
         <button id="noBtn">NO 🙈</button>
     </div>
 
+    <!-- Image Gallery -->
     <div id="gallery">
         <img id="slide">
         <p>Forever & Always 💕</p>
@@ -95,13 +102,13 @@ img{
 </div>
 
 <script>
-/* Start music + show valentine */
+// Start music + show Valentine
 document.getElementById("nextBtn").addEventListener("click",()=>{
     document.getElementById("bgMusic").play();
     document.getElementById("valentineSection").style.display="block";
 });
 
-/* YES */
+// YES click
 document.getElementById("yesBtn").addEventListener("click",()=>{
     document.getElementById("valentineSection").style.display="none";
     document.getElementById("gallery").style.display="block";
@@ -109,63 +116,64 @@ document.getElementById("yesBtn").addEventListener("click",()=>{
     alert("💖 You just made my heart the happiest 😍");
 });
 
-/* NO escape */
+// NO button escape
 const noBtn=document.getElementById("noBtn");
-noBtn.addEventListener("mouseenter",()=>{
+noBtn.addEventListener("mouseover",()=>{
     noBtn.style.left=Math.random()*(window.innerWidth-100)+"px";
     noBtn.style.top=Math.random()*(window.innerHeight-50)+"px";
 });
 
-/* Slideshow */
+// Slideshow images (make sure names match)
 const images=[
 "{{ url_for('static', filename='images/pic1.jpg') }}",
-"{{ url_for('static', filename='images/pic2.jpg') }}",
-"{{ url_for('static', filename='images/pic3.jpg') }}",
-"{{ url_for('static', filename='images/pic4.jpg') }}",
-"{{ url_for('static', filename='images/pic5.jpg') }}"
+"{{ url_for('static', filename='images/pic2.png') }}",
+"{{ url_for('static', filename='images/pic3.png') }}",
+"{{ url_for('static', filename='images/pic4.png') }}"
 ];
-let i=0;
+let index=0;
 
 function startSlideshow(){
     const slide=document.getElementById("slide");
-    slide.src=images[0];
+    slide.src=images[index];
     setInterval(()=>{
-        i=(i+1)%images.length;
-        slide.src=images[i];
+        index=(index+1)%images.length;
+        slide.src=images[index];
     },3000);
 }
 
-/* Fireworks */
+/* Fireworks animation */
 const canvas=document.getElementById("fireworks");
 const ctx=canvas.getContext("2d");
 canvas.width=window.innerWidth;
 canvas.height=window.innerHeight;
 
 let particles=[];
-function fire(){
-    for(let i=0;i<80;i++){
+function createFirework(){
+    for(let i=0;i<60;i++){
         particles.push({
             x:Math.random()*canvas.width,
             y:Math.random()*canvas.height/2,
-            vx:(Math.random()-0.5)*6,
-            vy:(Math.random()-0.5)*6,
-            life:100
+            vx:(Math.random()-0.5)*5,
+            vy:(Math.random()-0.5)*5,
+            life:80
         });
     }
 }
+
 function animate(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
     particles.forEach((p,i)=>{
         p.x+=p.vx;
         p.y+=p.vy;
         p.life--;
-        ctx.fillStyle="rgba(255,0,120,0.9)";
+        ctx.fillStyle="rgba(255,255,255,0.8)";
         ctx.fillRect(p.x,p.y,3,3);
         if(p.life<=0)particles.splice(i,1);
     });
     requestAnimationFrame(animate);
 }
-setInterval(fire,1200);
+
+setInterval(createFirework,1200);
 animate();
 </script>
 
