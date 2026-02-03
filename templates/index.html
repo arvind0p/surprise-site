@@ -68,9 +68,9 @@ img{
 
 <canvas id="fireworks"></canvas>
 
-<!-- 🎵 Music (plays after click) -->
+<!-- 🎵 Background Music -->
 <audio id="bgMusic" loop>
-  <source src="{{ url_for('static', filename='music/happy-birthday.mp3') }}">
+  <source src="{{ url_for('static', filename='music/happy-birthday.mp3') }}" type="audio/mpeg">
 </audio>
 
 <div class="card">
@@ -95,13 +95,13 @@ img{
 </div>
 
 <script>
-/* Start music on first click */
+// ▶ Start music + show valentine
 document.getElementById("nextBtn").addEventListener("click",()=>{
     document.getElementById("bgMusic").play();
     document.getElementById("valentineSection").style.display="block";
 });
 
-/* YES */
+// ❤️ YES
 document.getElementById("yesBtn").addEventListener("click",()=>{
     document.getElementById("valentineSection").style.display="none";
     document.getElementById("gallery").style.display="block";
@@ -109,21 +109,21 @@ document.getElementById("yesBtn").addEventListener("click",()=>{
     alert("💖 You just made my heart the happiest 😍");
 });
 
-/* NO escape */
+// 🙈 NO button runs
 const noBtn=document.getElementById("noBtn");
 noBtn.addEventListener("mouseover",()=>{
     noBtn.style.left=Math.random()*(window.innerWidth-100)+"px";
     noBtn.style.top=Math.random()*(window.innerHeight-50)+"px";
 });
 
-/* Slideshow */
+// 🖼️ Slideshow (ONLY existing images)
 const images=[
 "{{ url_for('static', filename='images/pic1.jpg') }}",
-"{{ url_for('static', filename='images/pic2.jpg') }}",
-"{{ url_for('static', filename='images/pic3.jpg') }}",
-"{{ url_for('static', filename='images/pic4.jpg') }}",
-"{{ url_for('static', filename='images/pic5.jpg') }}"
+"{{ url_for('static', filename='images/pic2.png') }}",
+"{{ url_for('static', filename='images/pic3.png') }}",
+"{{ url_for('static', filename='images/pic4.png') }}"
 ];
+
 let i=0;
 function startSlideshow(){
     const slide=document.getElementById("slide");
@@ -134,7 +134,7 @@ function startSlideshow(){
     },3000);
 }
 
-/* Fireworks */
+// 🎆 Fireworks
 const canvas=document.getElementById("fireworks");
 const ctx=canvas.getContext("2d");
 canvas.width=window.innerWidth;
@@ -152,6 +152,7 @@ function fire(){
         });
     }
 }
+
 function animate(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
     particles.forEach((p,i)=>{
