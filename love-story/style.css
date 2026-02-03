@@ -1,0 +1,40 @@
+body {
+  margin: 0;
+  background: #0d0d0d;
+  color: white;
+  font-family: Arial;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.scene {
+  width: 90%;
+  max-width: 900px;
+  text-align: center;
+}
+
+.time {
+  font-size: 22px;
+  margin-bottom: 10px;
+  opacity: 0.8;
+}
+
+.characters {
+  display: flex;
+  justify-content: space-around;
+}
+
+.char img {
+  width: 180px;
+  border-radius: 20px;
+}
+
+.chat {
+  margin-top: 20px;
+  background: #1f1f1f;
+  padding: 15px;
+  border-radius: 15px;
+  font-size: 18px;
+}
