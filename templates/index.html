@@ -18,6 +18,8 @@ canvas{
     position:fixed;
     top:0;
     left:0;
+    width:100%;
+    height:100%;
     z-index:0;
 }
 
@@ -34,8 +36,6 @@ canvas{
     animation:fadeIn 1.5s ease;
 }
 
-h1{margin-bottom:10px;}
-
 button{
     padding:12px 22px;
     font-size:16px;
@@ -49,17 +49,12 @@ button{
 #yesBtn{background:#2ecc71;color:white;}
 #noBtn{background:#e74c3c;color:white;position:absolute;}
 
-#valentineSection,
-#gallery,
-#loveLetter{
-    display:none;
-    margin-top:20px;
-}
+#valentineSection{display:none;margin-top:20px;}
+#gallery{display:none;margin-top:20px;}
 
 img{
     width:100%;
     border-radius:15px;
-    animation:fadeIn 1.5s ease;
 }
 
 @keyframes fadeIn{
@@ -73,9 +68,9 @@ img{
 
 <canvas id="fireworks"></canvas>
 
-<!-- 🎵 Birthday Music -->
-<audio autoplay loop>
-  <source src="{{ url_for('static', filename='music/happy-birthday.mp3') }}" type="audio/mpeg">
+<!-- 🎵 Music (plays after click) -->
+<audio id="bgMusic" loop>
+  <source src="{{ url_for('static', filename='music/happy-birthday.mp3') }}">
 </audio>
 
 <div class="card">
@@ -85,15 +80,93 @@ img{
         May your smile always stay this beautiful ✨
     </p>
 
-    <button id="nextBtn" onclick="showValentine()">Next Surprise 🎀</button>
+    <button id="nextBtn">Next Surprise 🎀</button>
 
-    <!-- Valentine Section -->
     <div id="valentineSection">
         <p style="font-size:18px;">💘 Rishika, will you be my Valentine? 💘</p>
-        <button id="yesBtn" onclick="yesClicked()">YES 💖</button>
+        <button id="yesBtn">YES 💖</button>
         <button id="noBtn">NO 🙈</button>
     </div>
 
-    <!-- Image Gallery -->
     <div id="gallery">
-        <img id="slide" src="">
+        <img id="slide">
+        <p>Forever & Always 💕</p>
+    </div>
+</div>
+
+<script>
+/* Start music on first click */
+document.getElementById("nextBtn").addEventListener("click",()=>{
+    document.getElementById("bgMusic").play();
+    document.getElementById("valentineSection").style.display="block";
+});
+
+/* YES */
+document.getElementById("yesBtn").addEventListener("click",()=>{
+    document.getElementById("valentineSection").style.display="none";
+    document.getElementById("gallery").style.display="block";
+    startSlideshow();
+    alert("💖 You just made my heart the happiest 😍");
+});
+
+/* NO escape */
+const noBtn=document.getElementById("noBtn");
+noBtn.addEventListener("mouseover",()=>{
+    noBtn.style.left=Math.random()*(window.innerWidth-100)+"px";
+    noBtn.style.top=Math.random()*(window.innerHeight-50)+"px";
+});
+
+/* Slideshow */
+const images=[
+"{{ url_for('static', filename='images/pic1.jpg') }}",
+"{{ url_for('static', filename='images/pic2.jpg') }}",
+"{{ url_for('static', filename='images/pic3.jpg') }}",
+"{{ url_for('static', filename='images/pic4.jpg') }}",
+"{{ url_for('static', filename='images/pic5.jpg') }}"
+];
+let i=0;
+function startSlideshow(){
+    const slide=document.getElementById("slide");
+    slide.src=images[i];
+    setInterval(()=>{
+        i=(i+1)%images.length;
+        slide.src=images[i];
+    },3000);
+}
+
+/* Fireworks */
+const canvas=document.getElementById("fireworks");
+const ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+function fire(){
+    for(let i=0;i<80;i++){
+        particles.push({
+            x:Math.random()*canvas.width,
+            y:Math.random()*canvas.height/2,
+            vx:(Math.random()-0.5)*6,
+            vy:(Math.random()-0.5)*6,
+            life:100
+        });
+    }
+}
+function animate(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach((p,i)=>{
+        p.x+=p.vx;
+        p.y+=p.vy;
+        p.life--;
+        ctx.fillStyle="rgba(255,255,255,0.8)";
+        ctx.fillRect(p.x,p.y,3,3);
+        if(p.life<=0)particles.splice(i,1);
+    });
+    requestAnimationFrame(animate);
+}
+setInterval(fire,1200);
+animate();
+</script>
+
+</body>
+</html>
