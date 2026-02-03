@@ -16,14 +16,12 @@ body{
     overflow:hidden;
 }
 
-/* Fireworks */
 canvas{
     position:fixed;
     inset:0;
     z-index:0;
 }
 
-/* Card */
 .card{
     position:relative;
     z-index:2;
@@ -34,7 +32,6 @@ canvas{
     border-radius:20px;
     box-shadow:0 15px 35px rgba(0,0,0,.3);
     text-align:center;
-    animation:fadeIn 1.2s ease;
 }
 
 button{
@@ -43,7 +40,7 @@ button{
     border:none;
     border-radius:10px;
     cursor:pointer;
-    margin:10px;
+    margin:8px;
 }
 
 .primary{background:#ff4d6d;color:white;}
@@ -59,20 +56,17 @@ button{
 
 img{
     width:100%;
-    max-height:60vh;
+    max-height:55vh;
     object-fit:contain;
     border-radius:15px;
-    background:white;
-    margin-top:15px;
+    margin-top:12px;
 }
 
-/* Ring animation */
+/* Ring */
 .ring{
     font-size:60px;
     animation:ringPop 1.5s ease forwards;
-    margin:20px 0;
 }
-
 @keyframes ringPop{
     0%{transform:scale(0);opacity:0;}
     60%{transform:scale(1.3);opacity:1;}
@@ -81,7 +75,7 @@ img{
 
 /* Typing */
 #typing{
-    font-size:16px;
+    font-size:15px;
     margin-top:10px;
     min-height:70px;
 }
@@ -90,30 +84,41 @@ img{
 .controls{
     display:flex;
     justify-content:space-between;
-    margin-top:12px;
+    margin-top:10px;
 }
-
 .arrow{
     background:#ff4d6d;
     color:white;
-    width:45px;
-    height:45px;
+    width:42px;
+    height:42px;
     font-size:22px;
     border-radius:50%;
 }
 
-/* Print page */
-@media print{
-    body{
-        background:white;
-    }
-    canvas, button{
-        display:none !important;
-    }
-    .card{
-        box-shadow:none;
-        max-width:100%;
-    }
+/* Secret overlay */
+#secret{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.75);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:5;
+    animation:fadeIn 1s ease;
+}
+#secret h1{
+    color:white;
+    font-size:48px;
+    animation:lovePop 1.5s ease;
+}
+@keyframes lovePop{
+    0%{transform:scale(.3);opacity:0;}
+    70%{transform:scale(1.2);}
+    100%{transform:scale(1);}
+}
+@keyframes fadeIn{
+    from{opacity:0;}
+    to{opacity:1;}
 }
 </style>
 </head>
@@ -122,7 +127,6 @@ img{
 
 <canvas id="fireworks"></canvas>
 
-<!-- 🎵 Music -->
 <audio id="bgMusic" loop>
   <source src="{{ url_for('static', filename='music/happy-birthday.mp3') }}">
 </audio>
@@ -139,10 +143,7 @@ img{
 <!-- STEP 2 -->
 <div id="step2" class="hidden">
     <h1>🎂 Happy Birthday Rishika 🎉</h1>
-    <p>
-        Today is special because <b>you</b> were born 💖<br>
-        May your smile always stay this beautiful ✨
-    </p>
+    <p>May your smile always stay this beautiful ✨</p>
     <button class="primary" onclick="showValentine()">Next Surprise 🎀</button>
 </div>
 
@@ -158,7 +159,6 @@ img{
 <!-- STEP 4 -->
 <div id="step4" class="hidden">
     <div class="ring">💍</div>
-
     <div id="typing"></div>
 
     <img id="slide">
@@ -168,9 +168,15 @@ img{
         <button class="arrow" onclick="nextImage()">➡</button>
     </div>
 
-    <button class="primary" onclick="window.print()">🖨️ Print / Save Memory</button>
+    <button class="primary" onclick="shareWhatsApp()">📱 Share on WhatsApp</button>
+    <button class="primary" onclick="showSecret()">🎁 One last surprise</button>
 </div>
 
+</div>
+
+<!-- SECRET -->
+<div id="secret" class="hidden" onclick="this.classList.add('hidden')">
+    <h1>I Love You ❤️</h1>
 </div>
 
 <script>
@@ -180,17 +186,16 @@ function showBirthday(){
     step2.classList.remove("hidden");
     bgMusic.play();
 }
-
 function showValentine(){
     step2.classList.add("hidden");
     step3.classList.remove("hidden");
 }
 
-/* Heart-style NO dodge */
-let angle=0;
+/* NO dodge */
+let a=0;
 noBtn.addEventListener("mouseenter",()=>{
-    angle+=Math.PI/3;
-    noBtn.style.transform=`translate(${60*Math.sin(angle)}px, ${-30*Math.cos(angle)}px)`;
+    a+=Math.PI/3;
+    noBtn.style.transform=`translate(${60*Math.sin(a)}px,${-30*Math.cos(a)}px)`;
 });
 
 /* YES */
@@ -205,24 +210,21 @@ function yesClicked(){
     },3000);
 }
 
-/* Typing text */
-const message=
+/* Typing */
+const msg=
 "From the moment you came into my life,\n"+
-"every ordinary day became special.\n\n"+
-"This ring is not just a symbol,\n"+
-"it’s a promise — of care, laughter,\n"+
-"and choosing you… every single day 💖";
-
+"everything became warmer.\n\n"+
+"This ring is a promise —\n"+
+"to choose you, always 💖";
 let t=0;
 function typeMessage(){
-    if(t<message.length){
-        typing.innerHTML+=message[t]==="\n"?"<br>":message[t];
-        t++;
-        setTimeout(typeMessage,40);
+    if(t<msg.length){
+        typing.innerHTML+=msg[t]==="\n"?"<br>":msg[t];
+        t++; setTimeout(typeMessage,40);
     }
 }
 
-/* Manual Image Slider */
+/* Images */
 const images=[
 "{{ url_for('static', filename='images/pic1.jpg') }}",
 "{{ url_for('static', filename='images/pic2.jpg') }}",
@@ -230,15 +232,29 @@ const images=[
 "{{ url_for('static', filename='images/pic4.jpg') }}",
 "{{ url_for('static', filename='images/pic5.jpg') }}"
 ];
-let index=0;
-function showImage(){slide.src=images[index];}
-function nextImage(){index=(index+1)%images.length;showImage();}
-function prevImage(){index=(index-1+images.length)%images.length;showImage();}
+let i=0;
+function showImage(){slide.src=images[i];}
+function nextImage(){i=(i+1)%images.length;showImage();}
+function prevImage(){i=(i-1+images.length)%images.length;showImage();}
 
-/* Colorful Fireworks */
+/* WhatsApp */
+function shareWhatsApp(){
+    const text=encodeURIComponent(
+        "I made something special for you 💖\n"+
+        "A small gift from my heart 🎁\n\n"+
+        window.location.href
+    );
+    window.open(`https://wa.me/?text=${text}`,"_blank");
+}
+
+/* Secret */
+function showSecret(){
+    document.getElementById("secret").classList.remove("hidden");
+}
+
+/* Fireworks */
 const ctx=fireworks.getContext("2d");
-fireworks.width=innerWidth;
-fireworks.height=innerHeight;
+fireworks.width=innerWidth; fireworks.height=innerHeight;
 let particles=[],fireInt;
 
 function startFireworks(){
@@ -256,7 +272,6 @@ function startFireworks(){
     },200);
 }
 function stopFireworks(){clearInterval(fireInt);}
-
 function animate(){
     ctx.clearRect(0,0,innerWidth,innerHeight);
     particles.forEach((p,i)=>{
